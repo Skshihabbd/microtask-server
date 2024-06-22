@@ -31,12 +31,12 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-    await client.connect();
+    // await client.connect();
 
-    await client.db("admin").command({ ping: 1 });
-    console.log(
-      "Pinged your deployment. You successfully connected to MongoDB!"
-    );
+    // await client.db("admin").command({ ping: 1 });
+    // console.log(
+    //   "Pinged your deployment. You successfully connected to MongoDB!"
+    // );
 
     const userData = client.db("MicroWorker").collection("userData");
     const taskCollection = client.db("MicroWorker").collection("taskCollection"); 
@@ -283,7 +283,58 @@ app.get('/adminhomealluser',async(req,res)=>{
   res.send(users)
 
 })
+app.get('/adminhomeallpayment',async(req,res)=>{
+  const data = await withdrawCollection.find().toArray();
+  res.send(data)
 
+})
+
+app.delete("/adminhomeallpayment/:id", async (req, res) => {
+  const id = req.params.id;
+  const query = { _id: new ObjectId(id) }; 
+  console.log(id)
+  const result = await withdrawCollection.deleteOne(query);
+  res.send(result);
+}); 
+
+
+app.put("/adminhomeallpayment/:id", async(req, res) => {
+  const id = req.params.id;
+  const filter = {_id: new ObjectId(id) };
+   const option = { upsert: true };
+  const updatedInfo = req.body;
+  console.log(updatedInfo,id)
+   const userCoinUpdate = { 
+    $set: {
+      name: updatedInfo.name,
+      
+       email: updatedInfo.email,
+      
+      
+      role: updatedInfo.role ,
+      coin: updatedInfo.coin,
+     image:updatedInfo.image,
+      
+     
+    },
+  };
+
+console.log(userCoinUpdate)
+   const result= await userData.updateOne(filter,userCoinUpdate,option)
+   res.send(result)
+}); 
+
+// main website home page database
+
+app.get('/homepagedata',async(req,res)=>{
+
+  const result=await userData.find({role:'worker'} ).sort({coin:-1}).limit(6).toArray() 
+  res.send(result)
+
+})
+
+
+// main website home page database
 
     // admin home all api
 
