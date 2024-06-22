@@ -9,8 +9,15 @@ const port = process.env.PORT || 5000;
 const cookieParser = require("cookie-parser");
 
 // middleware
-// app.use(cors(corsOptions))
-app.use(cors());
+const corsOptions={
+  origin: ["http://localhost:5173"],
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+  withCredentials: true,
+};
+
+ app.use(cors(corsOptions))
+
+// app.use(cors());
 
 app.use(express.json());
 app.use(cookieParser());
@@ -237,7 +244,7 @@ console.log(userCoinUpdate)
 }) 
   // submission worker home sun of approved payable amount
     // worker home
-    app.get('/usere',async(req,res)=>{
+    app.get('/usere',verifyToken, async(req,res)=>{
       
         console.log(req.query)
         let query={}
