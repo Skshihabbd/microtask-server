@@ -15,7 +15,7 @@ const corsOptions={
   withCredentials: true,
 };
 
- app.use(cors(corsOptions))
+  app.use(cors())
 
 // app.use(cors());
 
@@ -153,7 +153,7 @@ console.log(userCoinUpdate)
 // withdrwacollection api
 
 
-    app.get('/alluser',async(req,res)=>{
+    app.get('/alluser',verifyToken,verifyAdmin,async(req,res)=>{
       
       //  console.log(req.query)
        
@@ -161,7 +161,7 @@ console.log(userCoinUpdate)
       const users = await userData.find().toArray();
       res.send(users)
     }) 
-    app.get('/user',async(req,res)=>{
+    app.get('/user',verifyToken,async(req,res)=>{
       
       //  console.log(req.query)
        let query={} 
@@ -172,7 +172,7 @@ console.log(userCoinUpdate)
       const users = await userData.findOne(query);
       res.send(users)
     }) 
-    app.get('/userr',async(req,res)=>{
+    app.get('/userr',verifyToken,async(req,res)=>{
       
       //  console.log(req.query)
        let query={} 
@@ -184,7 +184,7 @@ console.log(userCoinUpdate)
       res.send(users)
     }) 
 
-    app.get('/usercreatorhomes',async(req,res)=>{
+    app.get('/usercreatorhomes',verifyToken,async(req,res)=>{
       
         console.log(req.query)
        let query={} 
@@ -197,7 +197,7 @@ console.log(userCoinUpdate)
     }) 
 
     // worker home 
-    app.get('/userworkerhomes',async(req,res)=>{
+    app.get('/userworkerhomes',verifyToken,async(req,res)=>{
       
       console.log(req.query)
      let query={} 
@@ -212,7 +212,7 @@ console.log(userCoinUpdate)
 
   // submission collection worker home
 
-  app.get('/userworkerhomessubmit',async(req,res)=>{
+  app.get('/userworkerhomessubmit',verifyToken,async(req,res)=>{
       
     console.log(req.query)
    let query={} 
@@ -229,7 +229,7 @@ console.log(userCoinUpdate)
   // submission collection worker home
 
   // submission worker home sun of approved payable amount
-  app.get('/userworkerhomessubmitpay',async(req,res)=>{
+  app.get('/userworkerhomessubmitpay',verifyToken,async(req,res)=>{
       
     console.log(req.query)
    let query={} 
@@ -255,7 +255,7 @@ console.log(userCoinUpdate)
       const users = await userData.find(query).toArray();
       res.send(users)
     }) 
-    app.get('/taskcreators/:id',async(req,res)=>{
+    app.get('/taskcreators/:id',verifyToken,async(req,res)=>{
  
 const idd = req.params.id;
 console.log(req.params.id)
@@ -285,12 +285,12 @@ res.send(result);
 
     // admin home all api
 
-app.get('/adminhomealluser',async(req,res)=>{
+app.get('/adminhomealluser',verifyToken,async(req,res)=>{
   const users = await userData.find().toArray();
   res.send(users)
 
 })
-app.get('/adminhomeallpayment',async(req,res)=>{
+app.get('/adminhomeallpayment',verifyToken,async(req,res)=>{
   const data = await withdrawCollection.find().toArray();
   res.send(data)
 
@@ -333,7 +333,7 @@ console.log(userCoinUpdate)
 
 // main website home page database
 
-app.get('/homepagedata',async(req,res)=>{
+app.get('/homepagedata',verifyToken,async(req,res)=>{
 
   const result=await userData.find({role:'worker'} ).sort({coin:-1}).limit(6).toArray() 
   res.send(result)
@@ -367,14 +367,14 @@ app.get('/homepagedata',async(req,res)=>{
       const result = await taskCollection.deleteOne(query);
       res.send(result);
     });
-    app.get("/taskcreatorsall/:id", async (req, res) => {
+    app.get("/taskcreatorsall/:id",verifyToken, async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await taskCollection.findOne(query);
       res.send(result);
     });
 
-    app.get('/taskcreator',async(req,res)=>{
+    app.get('/taskcreator',verifyToken,async(req,res)=>{
       
       //  console.log(req.query)
        let query={} 
@@ -388,7 +388,7 @@ app.get('/homepagedata',async(req,res)=>{
 
 
 
-    app.get('/taskcreatorhome',async(req,res)=>{
+    app.get('/taskcreatorhome',verifyToken,async(req,res)=>{
       
       //  console.log(req.query)
        let query={} 
@@ -424,7 +424,7 @@ console.log(taskInfo)
 const result =await submissionCollection.insertOne(taskInfo) 
 res.send(result);
     }) 
-    app.get('/taskcreatorhomesubmit',async(req,res)=>{
+    app.get('/taskcreatorhomesubmit',verifyToken,async(req,res)=>{
 const taskInfo=req.body 
 
 let query={} 
